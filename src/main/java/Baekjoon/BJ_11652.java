@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-public class BJ11652 {
+public class BJ_11652 {
 
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringBuilder sb = new StringBuilder();
