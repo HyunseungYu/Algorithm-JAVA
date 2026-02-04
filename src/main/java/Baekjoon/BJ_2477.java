@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
-class BJ2477 {
+class BJ_2477 {
 
 	private static BufferedReader br;
 	private static BufferedWriter bw;
