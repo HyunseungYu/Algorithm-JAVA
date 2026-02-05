@@ -1,5 +1,6 @@
+package SWEA;
+
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -11,7 +12,7 @@ public class Solution_d4_8275_햄스터_서울_8반_유현승 {
 	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
-		System.setIn(new FileInputStream("res/input.txt"));
+//		System.setIn(new FileInputStream("res/input.txt"));
 		br = new BufferedReader(new InputStreamReader(System.in));
 
 		int T = Integer.parseInt(br.readLine());
@@ -30,7 +31,7 @@ public class Solution_d4_8275_햄스터_서울_8반_유현승 {
 	static int[] l, r, s;
 	static int[] cases; // 우리에 햄스터 수를 저장하는 경우의 수
 	static int[] answer;
-	static int maxHamaster;
+	static int maxHamasters;
 
 
 	static String solution() throws Exception {
@@ -38,8 +39,7 @@ public class Solution_d4_8275_햄스터_서울_8반_유현승 {
 		N = Integer.parseInt(st.nextToken());
 		X = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		answer = null;
-		maxHamaster = Integer.MIN_VALUE;
+		maxHamasters = Integer.MIN_VALUE;
 
 		l = new int[M];
 		r = new int[M];
@@ -52,6 +52,7 @@ public class Solution_d4_8275_햄스터_서울_8반_유현승 {
 			s[i] = Integer.parseInt(st.nextToken());
 		}
 
+		answer = null;
 		cases = new int[N];
 		comb(0);
 
@@ -94,12 +95,12 @@ public class Solution_d4_8275_햄스터_서울_8반_유현승 {
 				return;
 		}
 
-		int sum = getHamster();
+		int hamsters = getHamster();
 
 		// 조건을 만족하는 조합의 햄스터 수 비교해서 더 큰 경우의 수로 교환
-		if(maxHamaster < sum) {
+		if(maxHamasters < hamsters) {
 			answer = Arrays.copyOf(cases, cases.length);
-			maxHamaster = sum;
+			maxHamasters = hamsters;
 		}
 
 	}
