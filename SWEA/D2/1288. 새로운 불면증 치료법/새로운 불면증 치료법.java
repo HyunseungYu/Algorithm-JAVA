@@ -10,7 +10,6 @@ public class Solution {
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
-//		System.setIn(new FileInputStream("res/input.txt"));
         br = new BufferedReader(new InputStreamReader(System.in));
 
         int T = Integer.parseInt(br.readLine());
@@ -27,23 +26,22 @@ public class Solution {
 
     static int N, count;
     static int current;
-    static boolean[] visited;
+    static int visited;
+    static final int total = (1 << 10) - 1;
 
     static int solution() throws Exception {
         st = new StringTokenizer(br.readLine(), " ");
         N = Integer.parseInt(st.nextToken());
-        visited = new boolean[10];
-        count = 0;
-
+        count = 1;
         current = N;
-        while(true) {
-            // 0~9까지 다 돌았다면
+        visited = 0;
 
+        while(true) {
             visit(current);
 
             if(allVisited())
                 return current;
-            
+
             current += N;
             count++;
         }
@@ -51,20 +49,18 @@ public class Solution {
     }
 
     static void visit(int current) {
-        while(0 < current) {
-            int left = current % 10;
-            visited[left] = true;
-            current /= 10;
+        char[] line = String.valueOf(current).toCharArray();
+        for (char c : line) {
+            int num = c - '0';
+            visited |= (1 << num);
         }
     }
 
     static boolean allVisited() {
-        for (int i = 0; i < 10; i++) {
-            if(!visited[i])
-                return false;
-        }
+        if(visited == total)
+            return true;
 
-        return true;
+        return false;
     }
 
 }
