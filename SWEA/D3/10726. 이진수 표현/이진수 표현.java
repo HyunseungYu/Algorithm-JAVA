@@ -27,27 +27,18 @@ public class Solution {
     }
 
     static int N, M;
-    static Deque<Boolean> stack;
 
     static String solution() throws Exception {
         st = new StringTokenizer(br.readLine(), " ");
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        stack = new ArrayDeque<>();
 
-        while (M != 0) {
-            boolean bit = (M & 1) == 1;
-            stack.offer(bit);
-
-            M = M >> 1;
-        }
-
+        int bit = 1;
         for (int i = 0; i < N; i++) {
-            if(stack.isEmpty())
+            if((M & bit) == 0)
                 return "OFF";
 
-            if(!stack.poll())
-                return "OFF";
+            bit = bit << 1;
         }
 
         return "ON";
