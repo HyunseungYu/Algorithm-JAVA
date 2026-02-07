@@ -33,11 +33,7 @@ public class Solution {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        int bit = 0;
-        for (int i = 0; i < N; i++) {
-            bit = bit << 1;
-            bit += 1;
-        }
+        int bit = (1 << N) - 1;
 
         if((bit & M) == bit)
             return "ON";
