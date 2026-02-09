@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
@@ -29,6 +28,7 @@ public class Solution {
 	static char[][] field;
 	static int tankI, tankJ;
 	static int direction;
+	static final char[] tank = {' ', '^', 'v', '<', '>' };
 	static final int[] dI = {0, -1, 1, 0, 0};
 	static final int[] dJ = {0, 0, 0, -1, 1};
 
@@ -37,7 +37,6 @@ public class Solution {
 		tankI = 0;
 		tankJ = 0;
 		direction = 0;
-
 
 		st = new StringTokenizer(br.readLine(), " ");
 		H = Integer.parseInt(st.nextToken());
@@ -93,21 +92,23 @@ public class Solution {
 			}
 		}
 
-		if(direction == 1) {
-			field[tankI][tankJ] = '^';
-		}
+//		if(direction == 1) {
+//			field[tankI][tankJ] = '^';
+//		}
+//
+//		if(direction == 2) {
+//			field[tankI][tankJ] = 'v';
+//		}
+//
+//		if(direction == 3) {
+//			field[tankI][tankJ] = '<';
+//		}
+//
+//		if(direction == 4) {
+//			field[tankI][tankJ] = '>';
+//		}
 
-		if(direction == 2) {
-			field[tankI][tankJ] = 'v';
-		}
-
-		if(direction == 3) {
-			field[tankI][tankJ] = '<';
-		}
-
-		if(direction == 4) {
-			field[tankI][tankJ] = '>';
-		}
+		field[tankI][tankJ] = tank[direction];
 
 		StringBuilder answer = new StringBuilder();
 		for (int i = 0; i < H; i++) {
