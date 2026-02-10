@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
@@ -47,10 +46,7 @@ public class Solution {
 
 		return count;
 	}
-
-	static final int[] dI = {-1, -1, 1, 1};
-	static final int[] dJ = {-1, +1, -1, 1};
-
+	
 	static void choose(int depth) {
 		if(depth == N) {
 			count++;
@@ -86,12 +82,5 @@ public class Solution {
 
 		}
 
-	}
-
-	static boolean isAvailable(int i, int j) {
-		if(i < 0 || N<=i || j < 0 || N<=j)
-			return false;
-
-		return true;
 	}
 }
