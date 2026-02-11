@@ -10,7 +10,6 @@ public class Solution {
 	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
-//		System.setIn(new FileInputStream("res/input.txt"));
 		br = new BufferedReader(new InputStreamReader(System.in));
 
 		int T = Integer.parseInt(br.readLine());
@@ -52,8 +51,10 @@ public class Solution {
 			return;
 		}
 
-		if(H <= heightSum)
+		if(H <= heightSum) {
 			min = Math.min(min, heightSum - H);
+			return;
+		}
 
 
 		// 현재 사람 탑 쌓기 X
