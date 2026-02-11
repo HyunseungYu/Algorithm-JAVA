@@ -52,6 +52,9 @@ public class Solution {
 			return;
 		}
 
+		if(H <= heightSum)
+			min = Math.min(min, heightSum - H);
+
 
 		// 현재 사람 탑 쌓기 X
 		choose(depth + 1, heightSum);
