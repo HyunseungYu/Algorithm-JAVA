@@ -48,41 +48,39 @@ public class Solution {
 
 		for (int i = 0; i < N; i++) {
 			int d = max - heights[i];
+
+			need1 += d & 1;
+			need2 += d / 2;
 			sumDef += d;
-			need1 += (d & 1);
-			need2 += (d / 2);
 		}
 
 		if(sumDef == 0)
 			return 0;
 
 		int day = 0;
-		int upper = max * N;
-
-		while (day <= upper) {
+		while(day <= N * max) {
 			if(canFinish(day))
 				return day;
 
 			day++;
 		}
 
-		return upper;
+		return day;
 	}
 
 	static boolean canFinish(int day) {
-		int odd = (day + 1) / 2;
-		int even = day / 2;
+		int odd = (day + 1) / 2; // +1이 가능한 횟수
+		int even = (day) / 2; // +2이 가능한 횟수
 
-		int ones = need1;
-		int twos = need2;
 
-		if(even < twos) {
-			int extra = twos - even;
-			ones += 2 * extra;
+		if(even < need2) {
+			int extra = need2 - even;
+			odd -= extra * 2;
 		}
 
-		return ones <= odd;
+		if(need1 <= odd)
+			return true;
 
-
+		return false;
 	}
 }
