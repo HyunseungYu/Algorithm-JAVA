@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
@@ -61,10 +60,11 @@ public class Solution {
 		}
 
 
+		// 현재 사람 탑 쌓기 O
+		choose(depth + 1, heightSum + heights[depth]);
+
 		// 현재 사람 탑 쌓기 X
 		choose(depth + 1, heightSum);
 
-		// 현재 사람 탑 쌓기 X
-		choose(depth + 1, heightSum + heights[depth]);
 	}
 }
