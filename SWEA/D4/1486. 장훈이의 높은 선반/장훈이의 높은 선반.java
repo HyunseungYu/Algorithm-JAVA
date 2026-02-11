@@ -45,14 +45,15 @@ public class Solution {
 	}
 
 	static void choose(int depth, int heightSum) {
-		if(depth == N) {
-			if(H <= heightSum)
-				min = Math.min(min, heightSum - H);
-			return;
-		}
 
 		if(H <= heightSum) {
 			min = Math.min(min, heightSum - H);
+			return;
+		}
+		
+		if(depth == N) {
+			if(H <= heightSum)
+				min = Math.min(min, heightSum - H);
 			return;
 		}
 
