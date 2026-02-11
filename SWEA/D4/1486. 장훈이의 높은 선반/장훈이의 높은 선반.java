@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
@@ -10,6 +11,7 @@ public class Solution {
 	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
+//		System.setIn(new FileInputStream("res/input.txt"));
 		br = new BufferedReader(new InputStreamReader(System.in));
 
 		int T = Integer.parseInt(br.readLine());
@@ -39,6 +41,7 @@ public class Solution {
 		for (int i = 0; i < N; i++)
 			heights[i] = Integer.parseInt(st.nextToken());
 
+		Arrays.sort(heights);
 		choose(0, 0);
 
 		return min;
@@ -50,7 +53,7 @@ public class Solution {
 			min = Math.min(min, heightSum - H);
 			return;
 		}
-		
+
 		if(depth == N) {
 			if(H <= heightSum)
 				min = Math.min(min, heightSum - H);
