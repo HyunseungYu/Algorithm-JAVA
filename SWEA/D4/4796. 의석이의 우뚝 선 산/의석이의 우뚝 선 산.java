@@ -1,6 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -40,27 +38,46 @@ public class Solution {
 			heights[i] = sc.nextInt();
 
 		int count = 0;
-		int up = 0;
-		int down = 0;
-		for (int i = 1; i < N; i++) {
+
+		for (int i = 1; i < N-1; i++) {
 			int left = heights[i-1];
 			int current = heights[i];
+			int right = heights[i+1];
 
-			// 상승이면
-			if(left < current) {
-				if(0 < down) {
-					count += down * up;
-					up = 0;
-					down = 0;
-				}
+			if(!(left < current && right < current))
+				continue;
 
-				up++;
-			} else { // 하강이면
-				down++;
+			// 이제부터 여기는 피크인 지점이니 좌우로 펼치면서 left 몇 개인지, right 몇 개인지 찾기
+			int leftCnt = 0;
+			int rightCnt = 0;
+
+			int l = i-1;
+			while(0 <= l) {
+				if(heights[l] > heights[l+1])
+					break;
+
+				l--;
 			}
-		}
+			l++;
+			leftCnt = i - l;
 
-		count += up * down;
+			int r = i+1;
+			while(r < N) {
+				if(heights[r-1] < heights[r])
+					break;
+
+				r++;
+			}
+			r--;
+			rightCnt = r - i;
+
+//			System.out.println("l = " + l);
+//			System.out.println("leftCnt = " + leftCnt);
+//			System.out.println("r = " + r);
+//			System.out.println("rightCnt = " + rightCnt);
+
+			count += rightCnt * leftCnt;
+		}
 
 		return count;
 	}
