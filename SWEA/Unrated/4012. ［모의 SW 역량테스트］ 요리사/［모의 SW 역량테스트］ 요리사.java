@@ -28,6 +28,7 @@ public class Solution {
 	static int[][] synergy;
 	static int min;
 	static boolean[] check;
+	static int[] c;
 
 	static int solution() throws Exception {
 		min = Integer.MAX_VALUE;
@@ -35,6 +36,7 @@ public class Solution {
 
 		check = new boolean[N];
 		synergy = new int[N][N];
+		c = new int[N/2];
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			for (int j = 0; j < N; j++) {
@@ -49,10 +51,54 @@ public class Solution {
 			}
 		}
 
-
-		choose(0, 0, 0);
+		combination(0, 0);
+//		choose(0, 0, 0);
 
 		return min;
+	}
+
+	static void combination(int start, int cnt) {
+		if(cnt == N/2) {
+			check2();
+			return;
+		}
+		for (int i = start; i < N; i++) {
+			c[cnt] = i;
+			combination(i+1, cnt+1);
+		}
+	}
+	static void check2(){
+		boolean[] isAFood = new boolean[N];
+		for (int i = 0; i < N / 2; i++) {
+			isAFood[c[i]] = true;
+		}
+
+		// 시너지 계산
+		int aSynergy = 0;
+		int bSynergy = 0;
+
+		for (int i = 0; i < N; i++) {
+			for (int j = i+1; j < N; j++) {
+				if(isAFood[i] && isAFood[j]) {
+					aSynergy += synergy[i][j];
+				}
+
+				if(!isAFood[i] && !isAFood[j]) {
+					bSynergy += synergy[i][j];
+				}
+			}
+		}
+
+//		for (int i = 0; i < N / 2; i++) {
+//			for (int j = i+1; j < N / 2; j++) {
+//				aSynergy += synergy[c[i]][c[j]];
+//			}
+//		}
+
+
+		// 최솟값 비교
+		int abs = Math.abs(aSynergy - bSynergy);
+		min = Math.min(min, abs);
 	}
 
 	static void choose(int index, int aCnt, int bCnt) {
