@@ -50,37 +50,28 @@ public class Solution {
 		}
 
 
-		choose(0);
+		choose(0, 0, 0);
 
 		return min;
 	}
 
-	static void choose(int index) {
+	static void choose(int index, int aCnt, int bCnt) {
 		if(index == N) {
-			check();
+			check(aCnt, bCnt);
 			return;
 		}
 
 
 		check[index] = false;
-		choose(index+1);
+		choose(index+1, aCnt+1, bCnt);
 
 		check[index] = true;
-		choose(index+1);
+		choose(index+1, aCnt, bCnt+1);
 	}
 
-	static void check() {
+	static void check(int aCnt, int bCnt) {
 		// 먼저 N/2 씩 있는지 확인
-		int trueCnt = 0;
-		int falseCnt = 0;
-
-		for (int i = 0; i < N; i++) {
-			if(check[i])
-				trueCnt++;
-		}
-
-		// N/2 : N/2 조합이 아니면 탈락
-		if(trueCnt != N/2)
+		if(aCnt != bCnt)
 			return;
 
 		// 시너지 계산
@@ -88,16 +79,12 @@ public class Solution {
 		int bSynergy = 0;
 		for (int i = 0; i < N; i++) {
 			for (int j = i+1; j < N; j++) {
-				if(check[i] && check[j]) {
+				if(!check[i] && !check[j]) {
 					aSynergy += synergy[i][j];
-//					aSynergy += synergy[j][i];
-					continue;
 				}
 
-				if(!check[i] && !check[j]) {
+				if(check[i] && check[j]) {
 					bSynergy += synergy[i][j];
-//					bSynergy += synergy[j][i];
-					continue;
 				}
 			}
 		}
