@@ -42,6 +42,14 @@ public class Solution {
 			}
 		}
 
+		// 시너지 합치기 그냥~ 시너지 계산 빠르게 하려고~~
+		for (int i = 0; i < N-1; i++) {
+			for (int j = i+1; j < N; j++) {
+				synergy[i][j] += synergy[j][i];
+			}
+		}
+
+
 		choose(0);
 
 		return min;
@@ -82,13 +90,13 @@ public class Solution {
 			for (int j = i+1; j < N; j++) {
 				if(check[i] && check[j]) {
 					aSynergy += synergy[i][j];
-					aSynergy += synergy[j][i];
+//					aSynergy += synergy[j][i];
 					continue;
 				}
 
 				if(!check[i] && !check[j]) {
 					bSynergy += synergy[i][j];
-					bSynergy += synergy[j][i];
+//					bSynergy += synergy[j][i];
 					continue;
 				}
 			}
