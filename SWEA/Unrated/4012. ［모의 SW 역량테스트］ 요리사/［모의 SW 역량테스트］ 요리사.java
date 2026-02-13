@@ -61,12 +61,15 @@ public class Solution {
 			return;
 		}
 
+		if(aCnt != N/2) {
+			check[index] = false;
+			choose(index + 1, aCnt + 1, bCnt);
+		}
 
-		check[index] = false;
-		choose(index+1, aCnt+1, bCnt);
-
-		check[index] = true;
-		choose(index+1, aCnt, bCnt+1);
+		if(bCnt != N/2) {
+			check[index] = true;
+			choose(index + 1, aCnt, bCnt + 1);
+		}
 	}
 
 	static void check(int aCnt, int bCnt) {
