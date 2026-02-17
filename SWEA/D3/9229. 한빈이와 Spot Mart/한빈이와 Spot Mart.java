@@ -1,60 +1,57 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+
+
+import java.io.*;
+import java.util.*;
 
 public class Solution {
 
-	static BufferedReader br;
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
+    static StringBuilder sb = new StringBuilder();
+    static Scanner sc;
+    static BufferedReader br;
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //		System.setIn(new FileInputStream("res/input.txt"));
-		br = new BufferedReader(new InputStreamReader(System.in));
+        sc = new Scanner(System.in);
+//        br = new BufferedReader(new InputStreamReader(System.in));
 
-		int T = Integer.parseInt(br.readLine());
+//        int T = Integer.parseInt(br.readLine());
+        int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++)
-		{
-			int solve = solution();
-			sb.append("#" + t + " " + solve + "\n");
-		}
+        for(int t = 1; t <= T; t++) {
+            int solution = solve();
+            sb.append("#" + t + " " + solution + "\n");
+        }
 
-		System.out.println(sb.toString());
-		br.close();
-	}
+        System.out.println(sb.toString());
+    }
 
-	static int N, M;
-	static int[] snacks;
-	static int maxSum;
 
-	static int solution() throws Exception {
-		maxSum = 0;
 
-		st = new StringTokenizer(br.readLine(), " ");
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
+    static int solve() throws Exception {
+        int N = sc.nextInt();
+        int M = sc.nextInt();
 
-		snacks = new int[N];
+        int[] snacks = new int[N];
+        for (int i = 0; i < N; i++)
+            snacks[i] = sc.nextInt();
 
-		st = new StringTokenizer(br.readLine(), " ");
-		for (int i = 0; i < N; i++)
-			snacks[i] = Integer.parseInt(st.nextToken());
+        int sum = 0;
+        int max = -1;
 
-		int sum = 0;
-		for (int i = 0; i < N; i++) {
-			for (int j = i+1; j < N; j++) {
-				sum = snacks[i] + snacks[j];
-				if(M < sum)
-					continue;
+        Arrays.sort(snacks);
+        for (int i = 0; i < N; i++) {
+            for (int j = i+1; j < N; j++) {
+                sum = snacks[i] + snacks[j];
+                if(M < sum)
+                    break;
 
-				maxSum = Math.max(maxSum, sum);
-			}
-		}
+                max = Math.max(max, sum);
+            }
+        }
 
-		return (maxSum != 0) ? maxSum : -1;
-	}
+        return max;
+    }
+
 
 
 }
