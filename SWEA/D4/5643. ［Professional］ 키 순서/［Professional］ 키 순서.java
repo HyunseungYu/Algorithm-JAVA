@@ -1,121 +1,122 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+
+
+import java.io.*;
 import java.util.*;
 
 public class Solution {
 
-	static BufferedReader br;
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
-	static Scanner sc;
+    static StringBuilder sb = new StringBuilder();
+    static Scanner sc;
+    static BufferedReader br;
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //		System.setIn(new FileInputStream("res/input.txt"));
-		sc = new Scanner(System.in);
-//		br = new BufferedReader(new InputStreamReader(System.in));
+        sc = new Scanner(System.in);
+//        br = new BufferedReader(new InputStreamReader(System.in));
 
-//		int T = Integer.parseInt(br.readLine().trim());
-		int T = sc.nextInt();
+//        int T = Integer.parseInt(br.readLine());
+        int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++) {
-			int solution = solve();
-			sb.append("#" + t + " " + solution + "\n");
-		}
+        for(int t = 1; t <= T; t++) {
+            int solution = solve();
+            sb.append("#" + t + " " + solution + "\n");
+        }
 
-		System.out.println(sb.toString());
-//		br.close();
-	}
+        System.out.println(sb.toString());
+    }
 
-	static int N, M;
-	static Node[] nodes;
+    static int N, M, cnt;
+    static boolean[][] adj;
 
-	static int solve() throws Exception {
-//		N = Integer.parseInt(br.readLine().trim());
-//		M = Integer.parseInt(br.readLine().trim());
-		N = sc.nextInt();
-		M = sc.nextInt();
-		nodes = new Node[N+1];
-		for (int i = 1; i < N+1; i++) {
-			nodes[i] = new Node(i);
-		}
+    static int solve() throws Exception {
+        cnt = 0;
+        N = sc.nextInt();
+        M = sc.nextInt();
 
-		// 노드 입력
-		for (int i = 0; i < M; i++) {
-//			st = new StringTokenizer(br.readLine(), " ");
-//			int child = Integer.parseInt(st.nextToken());
-//			int parent = Integer.parseInt(st.nextToken());
-			int child = sc.nextInt();
-			int parent = sc.nextInt();
-			nodes[parent].addChild(nodes[child]);
-		}
+        adj = new boolean[N+1][N+1];
+        for (int i = 0; i < M; i++) {
+            int smaller = sc.nextInt();
+            int bigger = sc.nextInt();
 
-		int count = 0;
-		// for문 돌면서 노드별로 up & down 배열 만들기 1이면 up, 2이면 down, 0이면 도달하지 못했으니 알 수 없음.
-		for (int i = 1; i < N + 1; i++) {
-			int[] upAndDown = new int[N+1];
-			visit(nodes[i], upAndDown);
+            adj[smaller][bigger] = true;
+        }
 
-			boolean isAllVisit = true;
-			for (int j = 1; j < N + 1; j++) {
-				if(upAndDown[j] == 0)
-					isAllVisit = false;
-			}
+        for (int i = 1; i <= N; i++) {
+            List<Integer> up = makeUp(i);
+            List<Integer> down = makeDown(i);
 
-			if(isAllVisit)
-				count++;
-		}
+            boolean[] visited = new boolean[N+1];
+            for (int j = 0; j < up.size(); j++) {
+                visited[up.get(j)] = true;
+            }
+            for (int j = 0; j < down.size(); j++) {
+                visited[down.get(j)] = true;
+            }
+            int visitedCnt = 0;
+            for (int j = 1; j <= N; j++) {
+                if(visited[j])
+                    visitedCnt++;
+            }
+            if(visitedCnt == N-1)
+                cnt++;
+        }
 
-		return count;
-	}
+        return cnt;
 
-	static void visit(Node node, int[] upAndDown) {
-		Deque<Node> queue = new ArrayDeque<>();
-		queue.add(node);
-		while(!queue.isEmpty()) {
-			Node cur = queue.poll();
-			upAndDown[cur.number] = 1;
 
-			for(Node p : cur.parents) {
-				if( upAndDown[p.number] == 0) {
-					upAndDown[p.number] = 1;
-					queue.add(p);
-				}
-			}
-		}
+    }
 
-		queue.clear();
-		queue.add(node);
-		while(!queue.isEmpty()) {
-			Node child = queue.poll();
-			upAndDown[child.number] = 2;
+    static List<Integer> makeUp(int n) {
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(n);
 
-			for(Node c : child.children) {
-				if( upAndDown[c.number] == 0) {
-					upAndDown[c.number] = 2;
-					queue.add(c);
-				}
-			}
-		}
+        boolean[] visited = new boolean[N+1];
+        List<Integer> ret = new ArrayList<>();
+        while (!q.isEmpty()) {
+            int node = q.poll();
 
-	}
+            if(visited[node])
+                continue;
+            visited[node] = true;
 
-	static class Node {
-		int number;
-		List<Node> parents;
-		List<Node> children;
+            for (int i = 1; i <= N; i++) {
+                if(adj[i][node]) {
+                    q.offer(i);
+                    ret.add(i);
+                }
+            }
+        }
 
-		Node(int number) {
-			this.number = number;
-			parents = new ArrayList<>();
-			children = new ArrayList<>();
-		}
+        return ret;
+    }
 
-		public void addChild(Node child) {
-			children.add(child);
-			child.parents.add(this);
-		}
-	}
+
+
+    static List<Integer> makeDown(int n) {
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(n);
+
+        List<Integer> ret = new ArrayList<>();
+
+        boolean[] visited = new boolean[N+1];
+        while (!q.isEmpty()) {
+            int node = q.poll();
+
+            if(visited[node])
+                continue;
+
+            visited[node] = true;
+
+            for (int i = 1; i <= N; i++) {
+                if(adj[node][i]) {
+                    q.offer(i);
+                    ret.add(i);
+                }
+            }
+        }
+
+        return ret;
+    }
+
+
 }
-
-// jS3lRY0gN6g
