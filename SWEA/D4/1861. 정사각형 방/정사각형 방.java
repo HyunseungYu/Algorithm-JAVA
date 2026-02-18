@@ -1,87 +1,87 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+
+
+import java.io.*;
+import java.util.*;
 
 public class Solution {
 
-	static BufferedReader br;
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
+    static StringBuilder sb = new StringBuilder();
+    static Scanner sc;
+    static BufferedReader br;
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //		System.setIn(new FileInputStream("res/input.txt"));
-		br = new BufferedReader(new InputStreamReader(System.in));
+        sc = new Scanner(System.in);
+//        br = new BufferedReader(new InputStreamReader(System.in));
 
-		int T = Integer.parseInt(br.readLine());
+//        int T = Integer.parseInt(br.readLine());
+        int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++) {
-			String solution = solution();
-			sb.append("#" + t + " " + solution + "\n");
-		}
+        for(int t = 1; t <= T; t++) {
+            String solution = solve();
+            sb.append("#" + t + " " + solution + "\n");
+        }
 
-		System.out.println(sb.toString());
-		br.close();
-	}
+        System.out.println(sb.toString());
+    }
 
-	static int N;
-	static int[][] rooms;
-	static int max, maxRoom;
+    static int N;
+    static int[][] map;
+    static int maxRoom, maxNumber;
 
-	static String solution() throws Exception {
-		max = 0;
-		maxRoom = Integer.MAX_VALUE;
+    static String solve() throws Exception {
+        maxRoom = Integer.MIN_VALUE;
+        maxNumber = Integer.MIN_VALUE;
 
-		N = Integer.parseInt(br.readLine());
-		rooms = new int[N][N];
 
-		for (int i = 0; i < N; i++) {
-			st = new StringTokenizer(br.readLine(), " ");
-			for (int j = 0; j < N; j++) {
-				rooms[i][j] = Integer.parseInt(st.nextToken());
-			}
-		}
+        N = sc.nextInt();
+        map = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                map[i][j] = sc.nextInt();
+            }
+        }
 
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				dfs(1, i, j, rooms[i][j]);
-			}
-		}
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                dfs(i, j, 1);
+            }
+        }
 
-		return maxRoom + " " + max;
-	}
+        return maxNumber + " " + maxRoom;
+    }
 
-	static void dfs(int depth, int i, int j, int from) {
-		if(!isAvailable(i, j))
-			return;
+    static final int[] di = {-1, 1, 0, 0};
+    static final int[] dj = {0, 0, -1, 1};
 
-		if(max < depth) {
-			max = depth;
-			maxRoom = from;
-		}
+    static void dfs(int i, int j, int cnt) {
+        if(!isAvail(i, j))
+            return;
 
-		if(max == depth) {
-			maxRoom = Math.min(maxRoom ,from);
-		}
+        if(maxRoom < cnt) {
+            maxRoom = cnt;
+            maxNumber = map[i][j];
+        } else if(maxRoom == cnt) {
+            maxNumber = Math.min(maxNumber, map[i][j]);
+        }
 
-		if(isAvailable(i-1, j) && rooms[i-1][j] == rooms[i][j] + 1)
-			dfs(depth+1, i-1, j, from);
 
-		if(isAvailable(i+1, j) && rooms[i+1][j] == rooms[i][j] + 1)
-			dfs(depth+1, i+1, j, from);
+        for (int k = 0; k < 4; k++) {
+            int ni = i + di[k];
+            int nj = j + dj[k];
 
-		if(isAvailable(i, j-1) && rooms[i][j-1] == rooms[i][j] + 1)
-			dfs(depth+1, i, j-1, from);
+            if(isAvail(ni, nj) && map[ni][nj] == map[i][j] - 1)
+                dfs(ni, nj, cnt + 1);
+        }
 
-		if(isAvailable(i, j+1) && rooms[i][j+1] == rooms[i][j] + 1)
-			dfs(depth+1, i, j+1, from);
+    }
 
-	}
+    static boolean isAvail(int i, int j) {
+        if(i < 0 || N <= i || j < 0 || N <= j)
+            return false;
 
-	static boolean isAvailable(int i, int j) {
-		if(i < 0 || N <= i || j < 0 || N <= j)
-			return false;
+        return true;
+    }
 
-		return true;
-	}
+
 }
