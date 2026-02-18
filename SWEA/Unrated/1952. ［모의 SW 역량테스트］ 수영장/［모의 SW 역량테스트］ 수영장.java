@@ -1,67 +1,70 @@
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+
+import java.io.*;
+import java.util.*;
 
 public class Solution {
 
-	static BufferedReader br;
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
+    static StringBuilder sb = new StringBuilder();
+    static Scanner sc;
+    static BufferedReader br;
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //		System.setIn(new FileInputStream("res/input.txt"));
-		br = new BufferedReader(new InputStreamReader(System.in));
+        sc = new Scanner(System.in);
+//        br = new BufferedReader(new InputStreamReader(System.in));
 
-		int T = Integer.parseInt(br.readLine());
+//        int T = Integer.parseInt(br.readLine());
+        int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++) {
-			int solve = solution();
-			sb.append("#" + t + " " + solve + "\n");
-		}
+        for(int t = 1; t <= T; t++) {
+            int solution = solve();
+            sb.append("#" + t + " " + solution + "\n");
+        }
 
-		System.out.println(sb.toString());
-		br.close();
-	}
+        System.out.println(sb.toString());
+    }
 
-	static int[] tickets;
-	static int[] calendar;
-	static int minFee;
+    static int[] fee;
+    static int[] month;
+    static int[] comb;
+    static int min;
 
-	static int solution() throws Exception {
-		minFee = 0;
-		tickets = new int[4];
-		calendar = new int[12];
+    static int solve() throws Exception {
+        fee = new int[4];
+        for (int i = 0; i < 4; i++) {
+            fee[i] = sc.nextInt();
+        }
 
-		st = new StringTokenizer(br.readLine(), " ");
-		for (int i = 0; i < 4; i++)
-			tickets[i] = Integer.parseInt(st.nextToken());
+        month = new int[12];
+        for (int i = 0; i < 12; i++) {
+            month[i] = sc.nextInt();
+        }
 
-		st = new StringTokenizer(br.readLine(), " ");
-		for (int i = 0; i < 12; i++)
-			calendar[i] = Integer.parseInt(st.nextToken());
+        comb = new int[12];
+        min = fee[3];
+        dfs(0, 0);
 
-		minFee = tickets[3];
-		choose(0, 0);
+        return min;
+    }
 
-		return minFee;
-	}
+    static void dfs(int depth, int sum) {
+        if(12 <= depth) {
+            min = Math.min(min, sum);
 
-	static void choose(int month, int cost) {
-		if(12 <= month) {
-			minFee = Math.min(minFee, cost);
-			return;
-		}
+            return;
+        }
 
-		// 1일 이용권 구매
-		choose(month + 1, cost + tickets[0] * calendar[month]);
+        int dailyFee = month[depth] * fee[0];
+        int monthFee = fee[1];
+        int threeMonthFee = fee[2];
 
-		// 1달 이용권 구매
-		choose(month + 1, cost + tickets[1]);
+        if(dailyFee < monthFee)
+            dfs(depth + 1, sum + dailyFee);
+        else
+            dfs(depth + 1, sum + monthFee);
+        dfs(depth + 3, sum + threeMonthFee);
+    }
 
-		// 3달 이용권 구매
-		choose(month + 3, cost+tickets[2]);
-	}
 
 }
