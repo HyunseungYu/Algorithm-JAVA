@@ -42,22 +42,10 @@ public class Solution {
         }
 
         for (int i = 1; i <= N; i++) {
-            List<Integer> up = makeUp(i);
-            List<Integer> down = makeDown(i);
+            int parentCnt = getParentCnt(i);
+            int childrenCnt = getChildrenCnt(i);
 
-            boolean[] visited = new boolean[N+1];
-            for (int j = 0; j < up.size(); j++) {
-                visited[up.get(j)] = true;
-            }
-            for (int j = 0; j < down.size(); j++) {
-                visited[down.get(j)] = true;
-            }
-            int visitedCnt = 0;
-            for (int j = 1; j <= N; j++) {
-                if(visited[j])
-                    visitedCnt++;
-            }
-            if(visitedCnt == N-1)
+            if(childrenCnt + parentCnt == N-1)
                 cnt++;
         }
 
@@ -66,12 +54,12 @@ public class Solution {
 
     }
 
-    static List<Integer> makeUp(int n) {
+    static int getParentCnt(int n) {
         Deque<Integer> q = new ArrayDeque<>();
         q.offer(n);
 
         boolean[] visited = new boolean[N+1];
-        List<Integer> ret = new ArrayList<>();
+        Set<Integer> ret = new HashSet<>();
         while (!q.isEmpty()) {
             int node = q.poll();
 
@@ -87,16 +75,16 @@ public class Solution {
             }
         }
 
-        return ret;
+        return ret.size();
     }
 
 
 
-    static List<Integer> makeDown(int n) {
+    static int getChildrenCnt(int n) {
         Deque<Integer> q = new ArrayDeque<>();
         q.offer(n);
 
-        List<Integer> ret = new ArrayList<>();
+        Set<Integer> ret = new HashSet<>();
 
         boolean[] visited = new boolean[N+1];
         while (!q.isEmpty()) {
@@ -115,7 +103,7 @@ public class Solution {
             }
         }
 
-        return ret;
+        return ret.size();
     }
 
 
