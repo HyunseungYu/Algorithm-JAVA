@@ -1,70 +1,73 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+
+
+import java.io.*;
+import java.util.*;
 
 public class Solution {
 
-	static BufferedReader br;
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
+    static StringBuilder sb = new StringBuilder();
+    static Scanner sc;
+    static BufferedReader br;
 
-	public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
 //		System.setIn(new FileInputStream("res/input.txt"));
-		br = new BufferedReader(new InputStreamReader(System.in));
+        sc = new Scanner(System.in);
+//        br = new BufferedReader(new InputStreamReader(System.in));
 
-		int T = Integer.parseInt(br.readLine());
+//        int T = Integer.parseInt(br.readLine());
+        int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++) {
-			int solution = solution();
-			sb.append("#" + t + " " + solution + "\n");
-		}
+        for(int t = 1; t <= T; t++) {
+            int solution = solve();
+            sb.append("#" + t + " " + solution + "\n");
+        }
 
-		System.out.println(sb.toString());
-		br.close();
-	}
+        System.out.println(sb.toString());
+    }
 
-	static int N, H;
-	static int[] heights;
-	static int min;
-
-	static int solution() throws Exception {
-		min = Integer.MAX_VALUE;
-
-		st = new StringTokenizer(br.readLine(), " ");
-		N = Integer.parseInt(st.nextToken());
-		H = Integer.parseInt(st.nextToken());
-
-		heights = new int[N];
-		st = new StringTokenizer(br.readLine(), " ");
-		for (int i = 0; i < N; i++)
-			heights[i] = Integer.parseInt(st.nextToken());
-
-		Arrays.sort(heights);
-		choose(0, 0);
-
-		return min;
-	}
-
-	static void choose(int depth, int heightSum) {
-
-		if(H <= heightSum) {
-			min = Math.min(min, heightSum - H);
-			return;
-		}
-
-		if(depth == N) {
-			if(H <= heightSum)
-				min = Math.min(min, heightSum - H);
-			return;
-		}
+    static int N, B;
+    static int[] heights;
+    static int min;
 
 
-		// 현재 사람 탑 쌓기 O
-		choose(depth + 1, heightSum + heights[depth]);
+    static int solve() throws Exception {
+        N = sc.nextInt();
+        B = sc.nextInt();
 
-		// 현재 사람 탑 쌓기 X
-		choose(depth + 1, heightSum);
+        heights = new int[N];
+        for (int i = 0; i < N; i++) {
+            heights[i] = sc.nextInt();
+        }
 
-	}
+        Arrays.sort(heights);
+
+        min = Integer.MAX_VALUE;
+        choose(0, 0);
+
+        return min;
+    }
+
+    static void choose(int depth, int sum) {
+        if(depth == N) {
+            if(B<=sum){
+
+                int diff = Math.abs(sum - B);
+                min = Math.min(min, diff);
+
+            }
+            return;
+        }
+
+        if(B < sum) {
+
+            int diff = Math.abs(sum - B);
+            min = Math.min(min, diff);
+            return;
+        }
+
+        choose(depth + 1, sum);
+        choose(depth + 1, sum + heights[depth]);
+    }
+
+
 }
