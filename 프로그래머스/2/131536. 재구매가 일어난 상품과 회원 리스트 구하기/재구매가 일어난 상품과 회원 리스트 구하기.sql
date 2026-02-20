@@ -1,12 +1,10 @@
 select
-    USER_ID,
-    PRODUCT_ID
+    user_id,
+    product_id
 from ONLINE_SALE
-group by USER_ID, PRODUCT_ID
-having 1 < count(PRODUCT_ID)
-order by USER_ID, product_id desc
+group by user_id, product_id
+having count(*) >= 2
+order by USER_ID, PRODUCT_ID desc
 
-# select
-#     *
-# from ONLINE_SALE
-# order by USER_ID, product_id;
+# select user_id, product_id, count(*) from online_sale
+# group  by user_id, product_id having count(*) >= 2
