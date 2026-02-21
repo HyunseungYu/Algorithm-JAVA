@@ -2,7 +2,7 @@ select
     car_id,
     case
         when max(
-            case
+            case 
                 when '2022-10-16' between start_date and end_date then 1
                 else 0
             end
