@@ -65,6 +65,6 @@ public class Solution {
 		if(roots[x] == x)
 			return x;
 
-		return roots[x] = find(roots[x]);
+		return find(roots[x]);
 	}
 }
