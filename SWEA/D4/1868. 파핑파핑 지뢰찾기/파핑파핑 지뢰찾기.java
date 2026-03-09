@@ -1,123 +1,120 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Solution {
 
-	static BufferedReader br;
+	static Scanner sc;
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
 //		System.setIn(new FileInputStream("res/input.txt"));
-		br = new BufferedReader(new InputStreamReader(System.in));
+		sc = new Scanner(System.in);
 
-		int T = Integer.parseInt(br.readLine());
+		int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++) {
-			int solution = solution();
-			sb.append("#" + t + " " + solution + "\n");
+		for(int t = 1; t <= T; t++)
+		{
+			int solve = solution();
+			sb.append("#" + t + " " + solve + "\n");
 		}
 
 		System.out.println(sb.toString());
-		br.close();
+		sc.close();
 	}
 
-    static int N;
-    static int[][] board;
-    static boolean[][] visited;
-    static int[] di = {-1, -1, -1, 0, 0, 1, 1, 1};
-    static int[] dj = {-1, 0, +1, -1, +1, -1, 0, +1};
-    static int count = 0;
+	static int N;
+	static char[][] field;
+	static int[][] mines;
+	static boolean[][] visited;
 
 	static int solution() throws Exception {
-        count = 0;
-        N = Integer.parseInt(br.readLine());
+		N = sc.nextInt();
+		field = new char[N][N];
+		mines = new int[N][N];
 
-        board = new int[N][N];
-        visited = new boolean[N][N];
+		for (int i = 0; i < N; i++) {
+			char[] line = sc.next().toCharArray();
+			for (int j = 0; j < N; j++) {
+				field[i][j] = line[j];
+			}
+		}
 
-        for (int i = 0; i < N; i++) {
-            char[] c = br.readLine().toCharArray();
-            for (int j = 0; j < N; j++) {
-                if (c[j] == '*') {
-                    board[i][j] = -1;
-                }
-            }
-        }
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				int count = getCount(i, j);
+				mines[i][j] = count;
+			}
+		}
 
-        // board에 주변 지뢰 개수 저장
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if(board[i][j] == -1)
-                    continue;
+		int count = 0;
+		visited = new boolean[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if(field[i][j] == '*')
+					visited[i][j] = true;
+			}
+		}
 
-                for (int k = 0; k < 8; k++) {
-                    int ni = i + di[k];
-                    int nj = j + dj[k];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if(!visited[i][j] && mines[i][j] == 0) {
+					count++;
+					dfs(i, j);
+				}
+			}
+		}
 
-                    if(!isAvailable(ni, nj))
-                        continue;
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				if(!visited[i][j] && mines[i][j] != 0)
+					count++;
+			}
+		}
 
-                    if(board[ni][nj] == -1)
-                        board[i][j]++;
-                }
-            }
-        }
+		return count;
+	}
 
-        count = 0;
-        // 지뢰 개수가 0인 지점부터 클릭
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if(board[i][j] == 0 && !visited[i][j]) {
-                    click(i, j);
-                    count++;
-                }
-            }
-        }
+	static void dfs(int i, int j) {
+		visited[i][j] = true;
 
-        // 나머지 부분 클릭
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if(!visited[i][j] && board[i][j] != -1) {
-                    click(i, j);
-                    count++;
-                }
-            }
-        }
+		if(mines[i][j] != 0)
+			return;
 
-        return count;
-    }
+		for (int k = 0; k < 8; k++) {
+			int ni = i + di[k];
+			int nj = j + dj[k];
 
-    static void click(int i, int j) {
-        if(!isAvailable(i, j))
-            return;
+			if(!isOk(ni, nj) || visited[ni][nj])
+				continue;
 
-        if(visited[i][j])
-            return;
+			dfs(ni, nj);
+		}
+	}
 
-        visited[i][j] = true;
+	static final int[] di = {-1, -1, -1, 0, 0, 1, 1, 1};
+	static final int[] dj = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-        if(board[i][j] != 0)
-            return;
+	static int getCount(int i, int j) {
+		int count = 0;
+		for (int k = 0; k < 8; k++) {
+			int ni = i + di[k];
+			int nj = j + dj[k];
 
-        // 클릭한 지점이 0이라면 주변 전파
-        for (int k = 0; k < 8; k++) {
-            int ni = i + di[k];
-            int nj = j + dj[k];
+			if(!isOk(ni, nj))
+				continue;
 
-            click(ni, nj);
-        }
-    }
+			if(field[ni][nj] == '*')
+				count++;
+		}
 
+		return count;
+	}
 
-    static boolean isAvailable(int i, int j) {
-        if(i < 0 || N <= i || j < 0 || N <= j)
-            return false;
+	static boolean isOk(int i, int j) {
+		if(i < 0 || N <= i || j < 0 || N <= j)
+			return false;
 
-        return true;
-    }
+		return true;
+	}
 }
