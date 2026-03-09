@@ -32,7 +32,7 @@ public class Solution {
 
 		roots = new int[N + 1];
 		for (int i = 1; i <= N; i++)
-			roots[i] = -1;
+			roots[i] = i;
 
 		for (int i = 0; i < M; i++) {
 			int left = sc.nextInt();
@@ -43,7 +43,7 @@ public class Solution {
 
 		int count = 0;
 		for (int i = 1; i <= N; i++) {
-			if(roots[i] == -1)
+			if(find(i) == i)
 				count++;
 		}
 
@@ -54,47 +54,17 @@ public class Solution {
 		int leftRoot = find(left);
 		int rightRoot = find(right);
 
-		// 둘 다 루트일 경우
-		if(leftRoot == left && rightRoot == right) {
-			roots[right] = left; // 오른쪽의 루트를 왼쪽으로 지정
-			return;
-		}
-
-		// left가 루트일 경우이고, right는 루트가 있을 경우
-		if(leftRoot == left && rightRoot != right) {
-			// 오른쪽의 루트가 왼쪽일 경우 그냥 지나감~~
-			if(rightRoot == left)
-				return;
-
-			roots[left] = rightRoot; // left의 루트에 오른쪽 루트를 지정
-		}
-
-		// 왼쪽에 루트가 있고, 오른쪽이 루트일 경우
-		if(leftRoot != left && rightRoot == right) {
-			// 왼쪽의 루트가 오른쪽일 경우 이미 지정되어 있으니 팻흐
-			if(leftRoot == right)
-				return;
-
-			roots[right] = leftRoot;
-		}
-
-		// 서로 다른 집단에 속해있는 경우 -> 합치기
-		if(leftRoot != left && rightRoot != right) {
-			if(leftRoot != rightRoot)
-				roots[leftRoot] = rightRoot; // 왼쪽 루트를 오른쪽 루트로 지정: 왼쪽 -> 오른쪽으로 합치기
-
-		}
-
-		// 루트가 같은 경우 패스~~
 		if(leftRoot == rightRoot)
 			return;
 
+		roots[rightRoot] = leftRoot;
+
 	}
 
-	static int find(int number) {
-		if(roots[number] == -1)
-			return number;
+	static int find(int x) {
+		if(roots[x] == x)
+			return x;
 
-		return find(roots[number]);
+		return roots[x] = find(roots[x]);
 	}
 }
