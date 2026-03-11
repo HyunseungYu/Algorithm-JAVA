@@ -25,47 +25,43 @@ public class Solution {
 	}
 
 	static int V, E;
+	static int[][] edges;
 	static int[] parent;
 
 	static long solve() throws Exception {
 		V = sc.nextInt();
 		E = sc.nextInt();
 
-		int[][] graph = new int[E][3];
+		edges = new int[E][3];
 		for (int i = 0; i < E; i++) {
-			int start = sc.nextInt();
-			int end = sc.nextInt();
-			int cost = sc.nextInt();
-
-			graph[i] = new int[] {start, end, cost};
+			edges[i] = new int[] {sc.nextInt(), sc.nextInt(), sc.nextInt()};
 		}
 
-		Arrays.sort(graph, (e1, e2) -> Integer.compare(e1[2], e2[2]));
-		long mst = 0;
+		Arrays.sort(edges, (e1, e2) -> Integer.compare(e1[2], e2[2]));
 
 		parent = new int[V+1];
-		for (int i = 1; i <= V; i++)
+		for (int i = 1; i <= V; i++) {
 			parent[i] = i;
+		}
 
+		int count = 0;
+		long mst = 0;
 		for (int i = 0; i < E; i++) {
-			int start = graph[i][0];
-			int end = graph[i][1];
-			int cost = graph[i][2];
+			if(count == V - 1)
+				break;
 
-			int rootS = findSet(start);
-			int rootE = findSet(end);
-
-			if(rootS == rootE)
+			int parentS = findSet(edges[i][0]);
+			int parentE = findSet(edges[i][1]);
+			if(parentS == parentE)
 				continue;
 
-			// union
-			parent[rootE] = rootS;
-
-			mst += cost;
+			parent[parentE] = parentS;
+			mst += edges[i][2];
+			count++;
 		}
 
 		return mst;
-    }
+	}
 
 	static int findSet(int x) {
 		if(parent[x] == x)
