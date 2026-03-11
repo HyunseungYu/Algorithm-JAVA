@@ -55,12 +55,15 @@ public class Solution {
 		Arrays.sort(E, (e1, e2) -> Long.compare(e1[2], e2[2]));
 
 		parent = new int[N];
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < N; i++)
 			parent[i] = i;
-		}
 
 		long mst = 0;
+		int cnt = 0;
 		for (int i = 0; i < length; i++) {
+			if(cnt == N - 1)
+				break;
+			
 			long s = E[i][0];
 			long e = E[i][1];
 			long cost = E[i][2];
@@ -72,6 +75,7 @@ public class Solution {
 				continue;
 
 			mst += cost;
+			cnt++;
 			parent[(int) parentE] = parentS;
 		}
 
