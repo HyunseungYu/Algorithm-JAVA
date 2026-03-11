@@ -27,7 +27,7 @@ public class Solution {
 	static int N;
 	static int[][] cords;
 	static long[][] E;
-	static long[] parent;
+	static int[] parent;
 
 	static long solve() throws Exception {
 		N = sc.nextInt();
@@ -42,29 +42,31 @@ public class Solution {
 		double ratio = sc.nextDouble();
 
 
-		E = new long[N * N][3];
+		int length = N * (N - 1) / 2;
+		E = new long[length][3];
+		int idx = 0;
 		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
+			for (int j = i + 1; j < N; j++) {
 				long cost = getDistance(cords[i], cords[j]);
-				E[i * N + j] = new long[] {i, j, cost};
+				E[idx++] = new long[] {i, j, cost};
 			}
 		}
 
 		Arrays.sort(E, (e1, e2) -> Long.compare(e1[2], e2[2]));
 
-		parent = new long[N];
+		parent = new int[N];
 		for (int i = 0; i < N; i++) {
 			parent[i] = i;
 		}
 
 		long mst = 0;
-		for (int i = 0; i < N * N; i++) {
+		for (int i = 0; i < length; i++) {
 			long s = E[i][0];
 			long e = E[i][1];
 			long cost = E[i][2];
 
-			long parentS = findSet(parent, s);
-			long parentE = findSet(parent, e);
+			int parentS = findSet((int) s);
+			int parentE = findSet((int) e);
 
 			if(parentS == parentE)
 				continue;
@@ -76,11 +78,11 @@ public class Solution {
 		return Math.round(mst * ratio);
 	}
 
-	static long findSet(long[] parent, long x) {
+	static int findSet(int x) {
 		if(parent[(int) x] == x)
 			return x;
 
-		return parent[(int) x] = findSet(parent, parent[(int) x]);
+		return parent[(int) x] = findSet(parent[(int) x]);
 	}
 
 	static long getDistance(int[] cord1, int[] cord2) {
