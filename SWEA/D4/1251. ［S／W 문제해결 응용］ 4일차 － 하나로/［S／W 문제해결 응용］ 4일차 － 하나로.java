@@ -44,12 +44,18 @@ public class Solution {
 
 		int length = N * (N - 1) / 2;
 		Edge[] edges = new Edge[length];
+		for (int i = 0; i < length; i++) {
+			edges[i] = new Edge();
+		}
 //		E = new long[length][3];
 		int idx = 0;
 		for (int i = 0; i < N; i++) {
 			for (int j = i + 1; j < N; j++) {
 				long cost = getDistance(cords[i], cords[j]);
-				edges[idx++] = new Edge(i, j, cost);
+
+				edges[idx].start = i;
+				edges[idx].end = j;
+				edges[idx++].cost = cost;
 //				E[idx++] = new long[] {i, j, cost};
 			}
 		}
@@ -103,6 +109,8 @@ public class Solution {
 	static class Edge {
 		int start, end;
 		long cost;
+
+		public Edge(){}
 
 		public Edge(int start, int end, long cost) {
 			this.start = start;
