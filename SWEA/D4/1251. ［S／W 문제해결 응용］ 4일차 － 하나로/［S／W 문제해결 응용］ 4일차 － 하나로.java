@@ -43,16 +43,19 @@ public class Solution {
 
 
 		int length = N * (N - 1) / 2;
-		E = new long[length][3];
+		Edge[] edges = new Edge[length];
+//		E = new long[length][3];
 		int idx = 0;
 		for (int i = 0; i < N; i++) {
 			for (int j = i + 1; j < N; j++) {
 				long cost = getDistance(cords[i], cords[j]);
-				E[idx++] = new long[] {i, j, cost};
+				edges[idx++] = new Edge(i, j, cost);
+//				E[idx++] = new long[] {i, j, cost};
 			}
 		}
 
-		Arrays.sort(E, (e1, e2) -> Long.compare(e1[2], e2[2]));
+//		Arrays.sort(E, (e1, e2) -> Long.compare(e1[2], e2[2]));
+		Arrays.sort(edges, (e1, e2) -> Long.compare(e1.cost, e2.cost));
 
 		parent = new int[N];
 		for (int i = 0; i < N; i++)
@@ -63,10 +66,11 @@ public class Solution {
 		for (int i = 0; i < length; i++) {
 			if(cnt == N - 1)
 				break;
-			
-			long s = E[i][0];
-			long e = E[i][1];
-			long cost = E[i][2];
+
+			Edge edge = edges[i];
+			int s = edge.start;
+			int e = edge.end;
+			long cost = edge.cost;
 
 			int parentS = findSet((int) s);
 			int parentE = findSet((int) e);
@@ -94,6 +98,17 @@ public class Solution {
 		long height = cord1[1] - cord2[1];
 
 		return width * width + height * height;
+	}
+
+	static class Edge {
+		int start, end;
+		long cost;
+
+		public Edge(int start, int end, long cost) {
+			this.start = start;
+			this.end = end;
+			this.cost = cost;
+		}
 	}
 
 }
