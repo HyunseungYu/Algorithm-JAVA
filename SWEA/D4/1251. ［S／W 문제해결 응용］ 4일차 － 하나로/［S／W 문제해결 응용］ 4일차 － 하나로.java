@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -25,12 +26,13 @@ public class Solution {
 
 	static int N;
 	static int[][] cords;
-	static long[][] costs;
+	static long[][] E;
+	static long[] parent;
 
 	static long solve() throws Exception {
 		N = sc.nextInt();
 
-		cords = new int[N][N];
+		cords = new int[N][2];
 		for (int i = 0; i < N; i++)
 			cords[i] = new int[] {sc.nextInt(), 0};
 
@@ -39,45 +41,46 @@ public class Solution {
 
 		double ratio = sc.nextDouble();
 
-		costs = new long[N][N];
+
+		E = new long[N * N][3];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				costs[i][j] = getDistance(cords[i], cords[j]);
+				long cost = getDistance(cords[i], cords[j]);
+				E[i * N + j] = new long[] {i, j, cost};
 			}
 		}
 
-		boolean[] visited = new boolean[N];
-		long[] P = new long[N];
-		for (int i = 0; i < N; i++)
-			P[i] = Long.MAX_VALUE;
+		Arrays.sort(E, (e1, e2) -> Long.compare(e1[2], e2[2]));
+
+		parent = new long[N];
+		for (int i = 0; i < N; i++) {
+			parent[i] = i;
+		}
 
 		long mst = 0;
-		P[0] = 0;
-		for (int i = 0; i < N; i++) {
-			long min = Long.MAX_VALUE;
-			long minVertex = -1;
-			for (int j = 0; j < N; j++) {
-				if(!visited[j] && P[j] < min) {
-					min = P[j];
-					minVertex = j;
-				}
-			}
+		for (int i = 0; i < N * N; i++) {
+			long s = E[i][0];
+			long e = E[i][1];
+			long cost = E[i][2];
 
-			visited[(int) minVertex] = true;
-			mst += min;
+			long parentS = findSet(parent, s);
+			long parentE = findSet(parent, e);
 
-			for (int j = 0; j < N; j++) {
-				if(minVertex == j)
-					continue;
+			if(parentS == parentE)
+				continue;
 
-				long cost = costs[(int) minVertex][j];
-				if(!visited[j] && cost < P[j]) {
-					P[j] = cost;
-				}
-			}
+			mst += cost;
+			parent[(int) parentE] = parentS;
 		}
 
 		return Math.round(mst * ratio);
+	}
+
+	static long findSet(long[] parent, long x) {
+		if(parent[(int) x] == x)
+			return x;
+
+		return parent[(int) x] = findSet(parent, parent[(int) x]);
 	}
 
 	static long getDistance(int[] cord1, int[] cord2) {
