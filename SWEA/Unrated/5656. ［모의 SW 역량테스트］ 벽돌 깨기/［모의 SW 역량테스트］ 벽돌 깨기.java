@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -147,9 +146,9 @@ public class Solution {
 	}
 
 	static int[][] makeNewField(int[][] field) {
-		int[][] newField = new int[H][W];
+		int[][] newField = new int[H][];
 		for (int i = 0; i < H; i++) {
-			newField[i] = Arrays.copyOf(field[i], W);
+			newField[i] = field[i].clone();
 		}
 
 		return newField;
