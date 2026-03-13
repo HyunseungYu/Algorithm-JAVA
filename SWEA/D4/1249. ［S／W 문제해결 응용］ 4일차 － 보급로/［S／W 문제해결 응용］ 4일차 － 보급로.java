@@ -51,16 +51,16 @@ public class Solution {
 		min = Integer.MAX_VALUE;
 		dfs(0, 0, 0);
 
-		return min;
+		return dp[N-1][N-1];
 	}
 
 	static final int[] di = {-1, 1, 0, 0};
 	static final int[] dj = {0, 0, -1, 1};
 	static void dfs(int i, int j, int sum) {
-		if(i == N-1 && j == N-1) {
-			min = sum;
-			return;
-		}
+//		if(i == N-1 && j == N-1) {
+//			min = sum;
+//			return;
+//		}
 
 		for (int k = 0; k < 4; k++) {
 			int ni = i + di[k];
@@ -69,8 +69,9 @@ public class Solution {
 				continue;
 
 			if(sum + cost[ni][nj] < dp[ni][nj]) {
-				dp[ni][nj] = sum + cost[ni][nj];
-				dfs(ni, nj, sum + cost[ni][nj]);
+				int nextCost = dp[i][j] + cost[ni][nj];
+				dp[ni][nj] = nextCost;
+				dfs(ni, nj, dp[i][j] + cost[ni][nj]);
 			}
 
 		}
