@@ -1,99 +1,83 @@
-import java.io.FileInputStream;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Solution {
+
 	static Scanner sc;
 	static StringTokenizer st;
 	static StringBuilder sb = new StringBuilder();
 
 	public static void main(String[] args) throws Exception {
-//		System.setIn(new FileInputStream("res/input.txt"));
+//      System.setIn(new FileInputStream("res/input.txt"));
 		sc = new Scanner(System.in);
 
 		int T = sc.nextInt();
 
-		for(int t = 1; t <= T; t++) {
-			int solution = solve();
-			System.out.println("#" + t + " " + solution);
+		for(int t = 1; t <= T; t++)
+		{
+			long solution = solve();
+			sb.append("#" + t + " " + solution + "\n");
 		}
 
+		System.out.println(sb.toString());
 		sc.close();
 	}
 
 	static int N;
-	static int[][] field;
+	static int[][] cost;
 	static int[][] dp;
-	static int endI, endJ;
 	static int min;
 
-	static int solve() throws Exception {
+	static long solve() throws Exception {
 		N = sc.nextInt();
-		field = new int[N][N];
-		dp = new int[N][N];
+		cost = new int[N][N];
 
+		sc.nextLine();
 		for (int i = 0; i < N; i++) {
-			char[] s = sc.next().toCharArray();
+			char[] line = sc.nextLine().toCharArray();
 			for (int j = 0; j < N; j++) {
-				field[i][j] = s[j] - '0';
-				dp[i][j] = -1;
+				cost[i][j] = line[j] - '0';
 			}
 		}
 
-
-		Queue<int[]> q = new ArrayDeque<>();
-		q.offer(new int[] {0, 0});
+		dp = new int[N][N];
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				dp[i][j] = Integer.MAX_VALUE;
+			}
+		}
 		dp[0][0] = 0;
 
-		while (!q.isEmpty()) {
-			int[] poll = q.poll();
-			int i = poll[0];
-			int j = poll[1];
-			int curTime = dp[i][j];
+		min = Integer.MAX_VALUE;
+		dfs(0, 0, 0);
 
-			for (int k = 0; k < 4; k++) {
-				int ni = i + di[k];
-				int nj = j + dj[k];
-
-				if(!isOk(ni, nj))
-					continue;
-
-				if(dp[ni][nj] == -1 || (dp[ni][nj] > curTime + field[ni][nj])) {
-					dp[ni][nj] = curTime + field[ni][nj];
-					q.offer(new int[]{ni, nj});
-				}
-			}
-
-
-		}
-
-		return dp[N-1][N-1];
+		return min;
 	}
 
 	static final int[] di = {-1, 1, 0, 0};
 	static final int[] dj = {0, 0, -1, 1};
-
-	static void dfs(int i, int j, int cost) {
-		if(!isOk(i, j))
-			return;
-
-		if(i == endI && j == endJ) {
-			min = Math.min(min, cost);
+	static void dfs(int i, int j, int sum) {
+		if(i == N-1 && j == N-1) {
+			min = sum;
 			return;
 		}
 
 		for (int k = 0; k < 4; k++) {
 			int ni = i + di[k];
 			int nj = j + dj[k];
+			if(!isOk(ni, nj))
+				continue;
 
-			dfs(ni, nj, cost + field[i][j]);
+			if(sum + cost[ni][nj] < dp[ni][nj]) {
+				dp[ni][nj] = sum + cost[ni][nj];
+				dfs(ni, nj, sum + cost[ni][nj]);
+			}
+
 		}
 	}
 
 	static boolean isOk(int i, int j) {
-		if(i < 0 || N<=i || j < 0 || N <= j)
+		if(i < 0 || N <= i || j < 0 || N <= j)
 			return false;
 
 		return true;
