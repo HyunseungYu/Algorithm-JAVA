@@ -1,3 +1,4 @@
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -25,8 +26,6 @@ public class Solution {
 
 	static int N;
 	static int[][] cost;
-	static int[][] dp;
-	static int min;
 
 	static long solve() throws Exception {
 		N = sc.nextInt();
@@ -40,42 +39,44 @@ public class Solution {
 			}
 		}
 
-		dp = new int[N][N];
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				dp[i][j] = Integer.MAX_VALUE;
+		PriorityQueue<int[]> q = new PriorityQueue<>((a1, a2) -> Integer.compare(a1[2], a2[2]));
+		q.offer(new int[] {0, 0, 0});
+		boolean[][] visited = new boolean[N][N];
+		visited[0][0] = true;
+
+		while (!q.isEmpty()) {
+			int[] poll = q.poll();
+			int i = poll[0];
+			int j = poll[1];
+			int currentCost = poll[2];
+
+			for (int k = 0; k < 4; k++) {
+				int ni = i + di[k];
+				int nj = j + dj[k];
+				if(!isOk(ni, nj))
+					continue;
+
+				if(visited[ni][nj])
+					continue;
+
+				q.offer(new int[] {ni, nj, currentCost + cost[ni][nj]});
+				visited[ni][nj] = true;
+				if(ni == N - 1 && nj == N -1) {
+					return currentCost;
+				}
 			}
+
+
 		}
-		dp[0][0] = 0;
 
-		min = Integer.MAX_VALUE;
-		dfs(0, 0, 0);
 
-		return dp[N-1][N-1];
+
+
+		return 1;
 	}
 
 	static final int[] di = {-1, 1, 0, 0};
 	static final int[] dj = {0, 0, -1, 1};
-	static void dfs(int i, int j, int sum) {
-//		if(i == N-1 && j == N-1) {
-//			min = sum;
-//			return;
-//		}
-
-		for (int k = 0; k < 4; k++) {
-			int ni = i + di[k];
-			int nj = j + dj[k];
-			if(!isOk(ni, nj))
-				continue;
-
-			if(sum + cost[ni][nj] < dp[ni][nj]) {
-				int nextCost = dp[i][j] + cost[ni][nj];
-				dp[ni][nj] = nextCost;
-				dfs(ni, nj, dp[i][j] + cost[ni][nj]);
-			}
-
-		}
-	}
 
 	static boolean isOk(int i, int j) {
 		if(i < 0 || N <= i || j < 0 || N <= j)
