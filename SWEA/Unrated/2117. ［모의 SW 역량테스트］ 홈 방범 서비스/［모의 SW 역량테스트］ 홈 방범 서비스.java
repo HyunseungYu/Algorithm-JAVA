@@ -1,76 +1,80 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Solution {
 
-	static Scanner sc;
-	static StringTokenizer st;
-	static StringBuilder sb = new StringBuilder();
+    static Scanner sc = new Scanner(System.in);
+    static StringBuilder sb = new StringBuilder();
 
-	public static void main(String[] args) throws Exception {
-//      System.setIn(new FileInputStream("res/input.txt"));
-		sc = new Scanner(System.in);
+    public static void main(String[] args) {
+        int T = sc.nextInt();
 
-		int T = sc.nextInt();
+        for(int t = 1; t <= T; t++)
+        {
+            int solution = solve();
+            sb.append("#" + t + " " + solution + "\n");
+        }
 
-		for (int t = 1; t <= T; t++) {
-			long solution = solve();
-			sb.append("#").append(t).append(" ").append(solution).append("\n");
-		}
+        System.out.println(sb.toString());
 
-		System.out.println(sb.toString());
-		sc.close();
-	}
+    }
 
-	static int N, M;
-	static int[][] field;
-	static List<int[]> homes;
+    static int N, M;
+    static int[][] map;
 
-	static long solve() throws Exception {
-		N = sc.nextInt();
-		M = sc.nextInt();
+    private static int solve() {
+        N = sc.nextInt();
+        M = sc.nextInt();
 
-		field = new int[N][N];
-		homes = new ArrayList<>();
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				field[i][j] = sc.nextInt();
+        map = new int[N][N];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                int home = sc.nextInt();
+                map[i][j] = home;
+            }
+        }
 
-				if(field[i][j] == 1)
-					homes.add(new int[] {i, j});
-			}
-		}
+        int maxHomeCount = Integer.MIN_VALUE;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                int homeCount = getHomeCount(i, j);
 
-		int maxHomeCount = 0;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
+                maxHomeCount = Math.max(maxHomeCount, homeCount);
+            }
+        }
 
-				// 거리별로 home 개수 구하기
-				for (int k = 1; k < 2 * N; k++) {
-					int homeCount = getHomeCount(i, j, k);
-					int cost = k * k + (k - 1) * (k - 1);
+        return maxHomeCount;
+    }
 
-					if(cost <= homeCount * M)
-						maxHomeCount = Math.max(maxHomeCount, homeCount);
-				}
-			}
-		}
+    private static int getHomeCount(int i, int j) {
+        int maxHomeCount = Integer.MIN_VALUE;
 
-		return maxHomeCount;
-	}
+        for (int r = 1; r <= 2 * N - 1; r++) {
+            int cost = r * r + (r-1) * (r-1);
+            int homeCount = getHome(i, j, r);
+            int benefit = homeCount * M;
 
-	static int getHomeCount(int i, int j, int k) {
-		int count = 0;
+            if(cost <= benefit)
+                maxHomeCount = Math.max(maxHomeCount, homeCount);
+        }
 
-		for(int[] home : homes) {
-			int distance = Math.abs(i - home[0]) + Math.abs(j - home[1]);
+        return maxHomeCount;
+    }
 
-			if(distance < k)
-				count++;
-		}
+    private static int getHome(int i, int j, int r) {
+        int home = 0;
 
-		return count;
-	}
+        for (int k = 0; k < N; k++) {
+            for (int l = 0; l < N; l++) {
+                if(map[k][l] == 0)
+                    continue;
+
+                int distance = Math.abs(k - i) + Math.abs(l - j);
+
+                if(distance <= r-1)
+                    home++;
+            }
+        }
+
+        return home;
+    }
 }
