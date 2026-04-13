@@ -4,7 +4,7 @@ class Solution {
 
     public int threeSumClosest(int[] nums, int target) {
         TARGET = target;
-        CLOSEST = Integer.MAX_VALUE / 2;
+        CLOSEST = nums[0] + nums[1] + nums[2];
 
         int length = nums.length;
 
