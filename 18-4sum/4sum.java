@@ -8,8 +8,11 @@ class Solution {
         for(int i=0; i<n; i++) {
             if(0 < i && nums[i] == nums[i-1])
                 continue;
-                
+
             for(int j=i+1; j<n; j++) {
+                if(i + 1 < j && nums[j] == nums[j-1])
+                    continue; 
+                    
                 int l = j+1;
                 int r = n-1;
 
