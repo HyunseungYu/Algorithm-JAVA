@@ -4,7 +4,7 @@ class Solution {
 
         int n = nums.length;
 
-        List<List<Integer>> answer = new ArrayList<>();
+        Set<List<Integer>> answer = new HashSet<>();
         for(int i=0; i<n; i++) {
             for(int j=i+1; j<n; j++) {
                 int l = j+1;
@@ -22,9 +22,6 @@ class Solution {
                         l++;
                         r--;
 
-                        if(answer.contains(list))
-                            continue;
-
                         answer.add(list);
                         continue;
                     } else if(sum < target) {
@@ -36,6 +33,6 @@ class Solution {
             }
         }
 
-        return answer;
+        return new ArrayList<>(answer);
     }
 }
