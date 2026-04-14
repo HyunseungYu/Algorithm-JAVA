@@ -1,61 +1,53 @@
 class Solution {
-    int TARGET;
-    int CLOSEST;
-
     public int threeSumClosest(int[] nums, int target) {
         Arrays.sort(nums);
-        int length = nums.length;
-
-        TARGET = target;
-        CLOSEST = nums[0] + nums[1] + nums[2];
+        int n = nums.length;
 
         int smallest = nums[0] + nums[1] + nums[2];
-        if(smallest == target || length == 3)
+
+        if(smallest == target || n == 3)
             return smallest;
 
-        if(target <= smallest)
+        if(target < smallest)
             return smallest;
 
-        int largest = nums[length - 3] + nums[length - 2] + nums[length - 1];
-        if(largest <= target)
-            return largest;
+        int biggest = nums[n-3] + nums[n-2] + nums[n-1];
+        if(biggest < target)
+            return biggest;
 
+        int closest = smallest;
 
-        for(int i = 1; i < length - 1; i++) {
-            int l = i - 1;
-            int r = i + 1;
+        // 이중 for문 투 포인터
+        for(int i=0; i<n-2; i++) {
+            int l = i + 1;
+            int r = n - 1;
+            int sum = 0;
 
-            while(0 <= l && r < length) {
-                int left = nums[l];
-                int right = nums[r];
-                
-                int sum = nums[i] + left + right;
-
-                if(sum == target)
-                    return target;
-
-                // sum이 target보다 작으면 -> r 한 칸 증가
+            while(l < r) {
+                sum = nums[i] + nums[l] + nums[r];
                 if(sum < target) {
-                    comapre(sum);
+                    l++;
+                } else if(target < sum) {
+                    r--;
+                } else {
+                    return target;
+                }
 
-                    r++;
-                } else { // sum이 target보다 크면 -> l 한 칸 감소
-                    comapre(sum);
-
-                    l--;
+                if(Math.abs(sum - target) < Math.abs(closest - target)) {
+                    closest = sum;
                 }
             }
+
+            // int diff = target - sum;
+            // if(Math.abs(sum - target) < Math.abs(closest - target)) {
+            //     closest = sum;
+            // }
+
+            System.out.println("closest = " + closest + ", sum = " + sum);
+
+
         }
 
-        return CLOSEST;
-    }
-
-    private void comapre(int sum) {
-        int diff = TARGET - sum;
-        int closestDiff = TARGET - CLOSEST;
-
-        if(Math.abs(diff) < Math.abs(closestDiff)) {
-            CLOSEST = sum;
-        }
+        return closest;
     }
 }
