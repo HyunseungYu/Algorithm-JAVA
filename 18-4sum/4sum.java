@@ -12,7 +12,7 @@ class Solution {
             for(int j=i+1; j<n; j++) {
                 if(i + 1 < j && nums[j] == nums[j-1])
                     continue; 
-                    
+
                 int l = j+1;
                 int r = n-1;
 
@@ -22,6 +22,14 @@ class Solution {
                         answer.add(Arrays.asList(nums[i], nums[j], nums[l], nums[r]));
                         l++;
                         r--;
+
+                        while(l < r && nums[l] == nums[l-1]) {
+                            l++;
+                        }
+
+                        while(l < r && nums[r] == nums[r+1]) {
+                            r--;
+                        }
 
 
                     } else if(sum < target) {
