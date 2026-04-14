@@ -6,24 +6,21 @@ class Solution {
 
         Set<List<Integer>> answer = new HashSet<>();
         for(int i=0; i<n; i++) {
+            if(0 < i && nums[i] == nums[i-1])
+                continue;
+                
             for(int j=i+1; j<n; j++) {
                 int l = j+1;
                 int r = n-1;
 
                 while(l < r) {
-                    long sum = (long) nums[i] + (long) nums[j] + (long) nums[l] + (long) nums[r];
+                    long sum = (long) nums[i] + nums[j] + nums[l] + nums[r];
                     if(sum == target) {
-
-                        List<Integer> list = new ArrayList<>();
-                        list.add(nums[i]);
-                        list.add(nums[j]);
-                        list.add(nums[l]);
-                        list.add(nums[r]);
+                        answer.add(Arrays.asList(nums[i], nums[j], nums[l], nums[r]));
                         l++;
                         r--;
 
-                        answer.add(list);
-                        continue;
+
                     } else if(sum < target) {
                         l++;
                     } else {
